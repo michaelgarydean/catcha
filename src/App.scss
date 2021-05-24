@@ -1,0 +1,218 @@
+/*
+ * @title       CATCHA
+ *
+ * @date        2021
+ *
+ * @artist      Cadie Desbiens-Desmeules <contact@push1stop.com>
+ *              https://desbiens-desmeules.com
+ *
+ *              Hicetnunc: https://www.hicetnunc.xyz/tz/tz1Q5kA2FxYJAVV8DXrTcmFwqejc1T5iTfqb
+ *              Tezos Public Key: tz1Q5kA2FxYJAVV8DXrTcmFwqejc1T5iTfqb
+ *
+ * @author      Code written by Michael Gary Dean <contact@michaeldean.ca>
+ *              https://michaelgarydean.com
+ *              github.com/michaelgarydean
+ * 
+ * @description False "catcha" created for Cadie Desbiens-Desmeules <contact@push1stop.com>
+ *              for her artworks based on privacy and personal data. Cars or Cats?
+ */
+
+  /* GLOBAL VARIABLES */
+
+ $catcha_width: 395px;
+ $catcha_height: 572px;
+
+ $outer_border_grey: #CECECE;
+ $inner_border_grey: #DFDFDF;
+
+ $catcha_background_color: #F9F9F9;
+
+ $blue_color: #4A90E2;
+ $copy_color: #FFFFFF;
+
+ $image_size: 124px;
+ $icon_size: 32px;
+
+ /*
+  * DEFAULT REACT
+  */
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 
+ * CATCHA STYLING
+ */
+ .catcha-placement {
+    position: absolute;
+    width: $catcha_width;
+    height: $catcha_height;
+
+}  
+
+.centered-container {
+    @extend .catcha-placement;
+
+    background-color: $catcha_background_color;
+
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    margin: auto;
+}
+
+.image-placeholder {
+    display: none;
+
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 406px;
+    height: 582px;
+
+    background: url('./placeholder-image.png') no-repeat;
+    background-size: 100% 100%;
+    margin-top: 2px;
+    margin-left: 1px;
+    opacity: 25%;
+}
+
+/* Borders */
+.catcha-outer-border {
+    @extend .catcha-placement;
+
+    box-sizing: border-box;
+
+    border-color: $outer_border_grey;
+    border-style: solid;
+    border-width: 1px;
+
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.16);
+}
+
+
+
+.catcha-interior-elements-container {
+  padding: 7px;
+}
+
+/* CATCHA Header */
+
+.catcha-header {
+  padding: 24px 24px;
+
+  text-align: left;
+  font-size: 14px;
+  color: $copy_color;
+
+  background-color: $blue_color;
+
+  p {
+    margin: 0;
+  }
+
+  h2 {
+    margin: 0;
+
+    font-size: 2em;
+  }
+
+}
+
+/* Image grid */
+
+.catcha-images {
+  display: grid;
+  grid-gap: 1px;
+  grid-template-columns: repeat(3, 1fr);
+
+  margin-top: 4px;
+
+  border-bottom: solid;
+  border-width: 1px;
+  border-color: $inner_border_grey;
+
+  div > img {
+    width: $image_size;
+    height: $image_size;
+  } 
+}
+
+.catcha-images > .catcha-single-image {
+  padding: 10px;
+  background-color: #ccc;
+}
+
+/* Icons */
+.catcha-icons {
+  float: left;
+
+  .icon {
+    display: inline-block;
+    margin: 14px 8px;
+    width: $icon_size;
+    height: $icon_size;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+/* button */
+.button {
+  float: right;
+  padding: 13px 25px;
+  margin: 9px 1px;
+
+  font-size: 13px;
+
+  background-color:  $blue_color;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+}
