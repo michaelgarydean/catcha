@@ -37,10 +37,11 @@ function App() {
 
               {/* Bottom of catcha */}
               <div className="catcha-footer">
+                <span className="icon-size-aligner"></span>
                 <div className="catcha-icons">
-                  <div className="icon"><img src={catchaIcons['refresh_2x.png'].default} /></div>
-                  <div className="icon"><img src={catchaIcons['audio_2x.png'].default} /></div>
-                  <div className="icon"><img src={catchaIcons['info_2x.png'].default} /></div>
+                  <div class="icon"><img src={catchaIcons['refresh_2x.png'].default} /></div>
+                  <div class="icon"><img src={catchaIcons['audio_2x.png'].default} /></div>
+                  <div class="icon"><img src={catchaIcons['info_2x.png'].default} /></div>
                 </div>
                 <div className="button-container">
                   <button className="verify-button" onClick={refreshPage}>VERIFY</button>
