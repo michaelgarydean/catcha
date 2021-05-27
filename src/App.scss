@@ -31,7 +31,12 @@
   $copy_color: #FFFFFF;
 
   $image_size: 124px;
-  $icon_size: 32px;
+  $icon_size: 27px;
+
+  $image-resizing-speed: 0.15s;
+  $image-size-on-click: 79%;
+
+  $inner_elements_padding: 7px;
 
  /*
   * DEFAULT REACT
@@ -75,6 +80,11 @@
       transform: rotate(360deg);
     }
   }
+
+
+/* 
+ *GLOBAL STYLES
+ */
 
 /* 
  * CATCHA STYLING
@@ -133,10 +143,17 @@
 
 
 .catcha-interior-elements-container {
-  padding: 7px;
 }
 
-/* CATCHA Header */
+/* 
+ * CATCHA top elemments
+ */
+.catcha-top-elements-container {
+  padding: $inner_elements_padding;
+  border-bottom: solid;
+  border-width: 1px;
+  border-color: $inner_border_grey;
+}
 
 .catcha-header {
   padding: 24px 24px;
@@ -154,7 +171,8 @@
   h2 {
     margin: 0;
 
-    font-size: 2em;
+    font-size: 28px;
+    font-weight: 900;
   }
 
 }
@@ -164,14 +182,10 @@
 .catcha-images {
 
   display: grid;
-  grid-gap: 1px;
+  grid-gap: 3px;
   grid-template-columns: repeat(3, 1fr);
 
   margin-top: 4px;
-
-  border-bottom: solid;
-  border-width: 1px;
-  border-color: $inner_border_grey;
 
   .catcha-single-image {
 
@@ -200,7 +214,7 @@
  * Animations for when the image has been click or not 
  */
 .catcha-image-animation {
-  animation-duration: 0.2s;
+  animation-duration: $image-resizing-speed;
   animation-timing-function: ease-in-out;
   animation-fill-mode: forwards;
 
@@ -216,8 +230,8 @@
 
 @keyframes fade-in-and-grow {
   from {
-    width: 75%;
-    height: 75%;
+    width: $image-size-on-click;
+    height: $image-size-on-click;
   }
   to {
     width: 100%;
@@ -237,9 +251,18 @@
     height: 100%;
   }
   to {
-    width: 75%;
-    height: 75%;
+    width: $image-size-on-click;
+    height: $image-size-on-click;
   }
+}
+
+
+/* 
+ * CATCHA footer
+ */
+.catcha-footer {
+  padding: $inner_elements_padding;
+  padding-top: 0px;
 }
 
 /* 
@@ -260,6 +283,7 @@
 
 .catcha-icons {
   float: left;
+  opacity: 55%;
 
   .icon {
     display: inline-block;
@@ -275,15 +299,23 @@
 }
 
 /* button */
-.button {
+.button-container {
   float: right;
+}
+
+.verify-button {
+
   padding: 13px 25px;
   margin: 9px 1px;
 
   font-size: 13px;
+  font-weight: 600;
 
   background-color:  $blue_color;
+
   border: none;
+  border-radius: 2px;
+
   color: white;
   text-align: center;
   text-decoration: none;

@@ -16,41 +16,44 @@ function App() {
   return (
     <div className="App">
 
-        <div class="centered-container">
-          <div class="catcha-outer-border">
+        <div className="centered-container">
+          <div className="catcha-outer-border">
 
-            <div class="catcha-interior-elements-container">
+            <div className="catcha-interior-elements-container">
 
-          {/* Header */}
-              <div class="catcha-header">
-                <p>Select all images with</p>
-                <h2>cats</h2>
-                <p>Click verify once there are none left.</p>
-              </div>
+              <div className="catcha-top-elements-container">
 
-            {/* Grid of images */}
-              <CatchaImageGrid />
+            {/* Header */}
+                <div className="catcha-header">
+                  <p>Select all images with</p>
+                  <h2>cats</h2>
+                  <p>Click verify once there are none left.</p>
+                </div>
+
+              {/* Grid of images */}
+                <CatchaImageGrid />
+
+              </div> {/* end catcha-top-elements-container */}
 
               {/* Bottom of catcha */}
-              <div class="catcha-footer">
-                <div class="catcha-icons">
-                  <div class="icon"><img src={catchaIcons['refresh_2x.png'].default} /></div>
-                  <div class="icon"><img src={catchaIcons['audio_2x.png'].default} /></div>
-                  <div class="icon"><img src={catchaIcons['info_2x.png'].default} /></div>
+              <div className="catcha-footer">
+                <div className="catcha-icons">
+                  <div className="icon"><img src={catchaIcons['refresh_2x.png'].default} /></div>
+                  <div className="icon"><img src={catchaIcons['audio_2x.png'].default} /></div>
+                  <div className="icon"><img src={catchaIcons['info_2x.png'].default} /></div>
                 </div>
-                <div class="button-verify">
-                  <button class="button" onClick={refreshPage}>VERIFY</button>
+                <div className="button-container">
+                  <button className="verify-button" onClick={refreshPage}>VERIFY</button>
                 </div>
               </div>
 
             </div> {/* end catcha-interior-elements-container */}
-
         </div>
 
       </div>
         
 
-          <div class="image-placeholder">
+          <div className="image-placeholder">
           </div>
 
     </div>
