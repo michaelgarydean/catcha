@@ -257,6 +257,14 @@
   }
 }
 
+.hide-image-before-load {
+  position: absolute;
+  height: $image_size;
+  width: $image_size;
+  background-color: $catcha_background_color;
+
+}
+
 
 /* 
  * CATCHA footer
