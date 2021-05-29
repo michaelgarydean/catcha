@@ -1,6 +1,4 @@
 import './App.scss';
-
-/* for preloading */
 import React, { useEffect, useState } from "react";
 
 /* Load images from the folders */
@@ -21,25 +19,17 @@ const catchaIcons = collectImages(require.context('./images/icons', false, /\.(p
    * 1 - is for cars
    */
 
-   const [imageType, setImageType] = useState(0);
-
-  //this effect runs first so it doesn't get overwritten
-  useEffect(() => {
-  	const data = localStorage.getItem('localData');
-
-    //first check if there is already data, then parse it.
-    if(data) {
-      //set the image type to the opposite of the last time
-      setImageType(!JSON.parse(data));
-	}
-  }, []); // Only run after the first render
+// Before setting a default value, try to get it from local storage.
+// If it exists, reset, update the value (using !)
+  const [imageType, setImageType] = useState(() => (
+    (!JSON.parse(localStorage.getItem('imageType')) || 0)
+  ));
 
   //store image type in local storage
   useEffect(() => {
-  	localStorage.setItem("localData", JSON.stringify(imageType));
+  	localStorage.setItem("imageType", JSON.stringify(imageType));
   });
 
-  console.log(imageType);
 
   return (
 	  	<div className="App">
@@ -49,34 +39,34 @@ const catchaIcons = collectImages(require.context('./images/icons', false, /\.(p
 
 	  	<div className="catcha-interior-elements-container">
 
-	  	<div className="catcha-top-elements-container">
+        <div className="catcha-top-elements-container">
 
-	  {/* Header */}
-	  <div className="catcha-header">
-	  <p>Select all images with</p>
-		{/* If imageType is 0, show cats, otherwise, show cars. */}
-		<h2>{imageType ? "cars" : "cats"}</h2>
-		<p>Click verify once there are none left.</p>
-		</div>
+          {/* Header */}
+          <div className="catcha-header">
+            <p>Select all images with</p>
+            {/* If imageType is 0, show cats, otherwise, show cars. */}
+            <h2>{imageType ? "cars" : "cats"}</h2>
+            <p>Click verify once there are none left.</p>
+          </div>
 
-		{/* Grid of images */}
-		{/* If imageType is 0, show cats, otherwise, show cars. */}
-		<CatchaImageGrid imageType={imageType} />
+            {/* Grid of images */}
+            {/* If imageType is 0, show cats, otherwise, show cars. */}
+            <CatchaImageGrid imageType={imageType} />
 
-		</div> {/* end catcha-top-elements-container */}
+          </div> {/* end catcha-top-elements-container */}
 
-		{/* Bottom of catcha */}
-		<div className="catcha-footer">
-		<span className="icon-size-aligner"></span>
-		<div className="catcha-icons">
-		<div className="icon"><img src={catchaIcons['refresh_2x.png'].default} /></div>
-		<div className="icon"><img src={catchaIcons['audio_2x.png'].default} /></div>
-		<div className="icon"><img src={catchaIcons['info_2x.png'].default} /></div>
-		</div>
-		<SubmitButton />
-		</div>
+          {/* Bottom of catcha */}
+          <div className="catcha-footer">
+            <span className="icon-size-aligner"></span>
+            <div className="catcha-icons">
+            <div className="icon"><img src={catchaIcons['refresh_2x.png'].default} alt="refresh icon" /></div>
+            <div className="icon"><img src={catchaIcons['audio_2x.png'].default} alt="audio icon" /></div>
+            <div className="icon"><img src={catchaIcons['info_2x.png'].default} alt="info icon" /></div>
+          </div>
+          <SubmitButton />
+          </div>
 
-		</div> {/* end catcha-interior-elements-container */}
+        </div> {/* end catcha-interior-elements-container */}
 		</div>
 
 		</div>
@@ -125,7 +115,7 @@ const catchaIcons = collectImages(require.context('./images/icons', false, /\.(p
  function collectImages(r) {
 
  	let images = {};
- 	r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
+ 	r.keys().map((item, index) => ( images[item.replace('./', '')] = r(item) ));
  	return images;
 
  }
@@ -137,47 +127,105 @@ const catchaIcons = collectImages(require.context('./images/icons', false, /\.(p
  */
  function CatchaImageGrid(props) {
 
- 	const gridSize = 9;
- 	const gridImages = [];
- 	const images = props.imageType ? catchaCarImages : catchaCatImages;
+  /* 
+   * Store a list of random numbers for each type of image, so they don't repeat until all the iamges
+   * in the image folders have been shown.
+   */
 
-  //total number of images in assets folder
-  const numberOfImages = Object.keys(images).length;
+   //First load data from local storage, or else initialize empty arrays
+   const [imageNumbersCats, setImageNumbersCats] = useState(
+      JSON.parse(localStorage.getItem('imageNumbersCats')) ||
+      fillWithRandomNumbers(Object.keys(catchaCatImages).length)
+    );
+   const [imageNumbersCars, setImageNumbersCars] = useState(
+      JSON.parse(localStorage.getItem('imageNumbersCars')) ||
+      fillWithRandomNumbers(Object.keys(catchaCarImages).length)
+    );
 
-  //stores random numbers used to choose images randomly from the folder
-  const imageNumbers = [];
+  //store image type in local storage when either imageNumbersCats, or imageNumbersCars is updated
+  useEffect(() => {
+    localStorage.setItem("imageNumbersCats", JSON.stringify(imageNumbersCats));
+    localStorage.setItem("imageNumbersCars", JSON.stringify(imageNumbersCars));
+  });
+
 
   /* 
-   * Create the <div> and insert a random image on the image grid
+   * Set up the grid and get the images for either Cats or Cars, depending on which image type is selected.
+   */
+ 	const gridSize = 9;
+ 	const gridImages = [];
+
+ 	const images = props.imageType ? catchaCarImages : catchaCatImages;
+  var imageNumbers = props.imageType ? imageNumbersCars : imageNumbersCats;
+
+  //is there at least the same number of elements in the imageNumbers arrays as the grid size?
+  if(imageNumbers.length < gridSize) {
+
+    //if not, regenerate the random number array so there is enough random numbers to select images for the grid
+    imageNumbers = fillWithRandomNumbers(Object.keys(images).length);
+
+    //if the image type is 'cars', then update the local storage for 'cars'
+    if(props.imageType) {
+      setImageNumbersCars(imageNumbers);
+    }
+
+  //if the image type is 'cats', then update the local storage for 'cats'
+    if(!props.imageType) {
+      setImageNumbersCats(imageNumbers);
+
+    }
+
+  }
+
+  /* 
+   * Create the <div> and insert a random image on the image grid for each index
    */
    for(let imageIndex=1; imageIndex <= gridSize; imageIndex++){
 
-   	/* Generate a random number. Generate a new one if it already has been chosen. */
-   	let num = randomNumber(numberOfImages);
-
-    //Has the random number already been chosen? If it has, choose another number
-    while(imageNumbers.includes(num)) {
-    	num = randomNumber(numberOfImages);
-    }
-
-    //Add random number to the array
-    imageNumbers.push(num);
-
     /*
+     * Get one of the random numbers off the front of the array
      * Filenames are written like "cat_01.jpg"
      * So format filenumbers to be exactly 2 digits (ex. 01, 11, 04 etc) for the filenames
      */
-     let fileNumber = String(num).padStart(2, '0');     
+     let fileNumber = String(imageNumbers.shift()).padStart(2, '0');
 
     /*
      * Create the <div> and insert a random image on the image grid;
      */
      gridImages.push(
-     	<CatchaImage fileNumber={fileNumber} imageIndex={imageIndex} images={images} imageType={props.imageType} />
+      <CatchaImage fileNumber={fileNumber} imageIndex={imageIndex} images={images} imageType={props.imageType} key={imageIndex} />
      );
  }
 
- return <div className="catcha-images">{gridImages}</div>;
+ return <div key="" className="catcha-images">{gridImages}</div>;
+}
+
+/*
+ * Fill an array with random numbers that don't repeat.
+ */
+function fillWithRandomNumbers(numElements) {
+
+  var randomNumbersArray = [];
+
+  for(let i=0; i<numElements; i++) {
+
+    /* 
+     * Generate a random number between [1, total number of elements]
+     */
+    var num = randomNumber(numElements);
+
+    //Has the random number already been chosen? If it has, choose another number
+    while(randomNumbersArray.includes(num)) {
+      num = randomNumber(numElements);
+    }
+
+    //Add random number to the array
+    randomNumbersArray.push(num);
+
+  }
+
+  return randomNumbersArray;
+
 }
 
 /* 
@@ -186,7 +234,7 @@ const catchaIcons = collectImages(require.context('./images/icons', false, /\.(p
  function randomNumber(maxNumber) {
  	var randomNumber = Math.floor((Math.random() * maxNumber) + 1);
  	return randomNumber;
- }
+}
 
 /*
  * =================================== 
@@ -210,15 +258,17 @@ const catchaIcons = collectImages(require.context('./images/icons', false, /\.(p
    * The <span> element is just used to vertically align the image (both set to inline-block).
    */
    return (
-	   	<div id={"image" + props.imageIndex} className="catcha-single-image">
-		   	{!isLoaded && <div className="hide-image-before-load"></div>}
-		   	<div className={isSelected ? "checkmark image-is-clicked" : "checkmark" }></div>
-		   	<span className="catcha-image-size-aligner"></span>
-		   	<img 
+	   	<div id={"image" + props.imageIndex} className="catcha-single-image" key={"image-div" + props.imageIndex}>
+		   	{!isLoaded && <div className="hide-image-before-load" key={"image-hider" + props.imageIndex}></div>}
+		   	<div className={isSelected ? "checkmark image-is-clicked" : "checkmark" } key={"checkmark" + props.imageIndex}></div>
+		   	<span className="catcha-image-size-aligner" key={"aligner" + props.imageIndex}></span>
+		   	<img
+          alt="source to identify" 
 			   	src={props.images[fileName].default} 
 			   	onLoad={() => (setLoaded(true))} 
 			   	className={isSelected ? "catcha-image image-is-clicked" : "catcha-image" } 
 			   	onClick={() => setSelected(!isSelected )}
+          key={"source-image" + props.imageIndex}
 		   	/>
 	   	</div>
    	)
