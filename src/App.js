@@ -74,10 +74,7 @@ function App() {
                   <div className="icon"><img src={catchaIcons['audio_2x.png'].default} /></div>
                   <div className="icon"><img src={catchaIcons['info_2x.png'].default} /></div>
                 </div>
-                <div className="button-container">
-                  {/* Before refreshing the page, change the image type for show the next type when the page refreshes  refreshPage() */}
-                  <button className="verify-button" onClick={() => {refreshPage()}}>VERIFY</button>
-                </div>
+                <SubmitButton />
               </div>
 
             </div> {/* end catcha-interior-elements-container */}
@@ -93,6 +90,23 @@ function App() {
   );
 }
 
+function SubmitButton() {
+
+  /*
+   * State variables
+   * isSubmitting: Behavior to change while the "submitting process" is taking place. 
+   * This is just for user feedback to see their action having an effect.
+   */
+  const [isSubmitting, setSubmitting] = useState(false);
+
+  return (
+    <div className="button-container">
+      {/* Before refreshing the page, change the image type for show the next type when the page refreshes  refreshPage() */}
+      <button className={isSubmitting ? "verify-button button-on-submit" : "verify-button" } onClick={() => {setSubmitting(true); refreshPage()}}>VERIFY</button>
+    </div>
+  );
+
+}
 
 /* 
  * When the verify button is clicked, show a new set of random images.

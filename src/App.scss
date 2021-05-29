@@ -29,6 +29,7 @@
 
   $blue_color: #4A90E2;
   $copy_color: #FFFFFF;
+  $submit_button_color: rgb(165, 196, 235);
 
   $image_size: 124px;
   $icon_size: 27px;
@@ -321,4 +322,10 @@
   text-decoration: none;
   display: inline-block;
   cursor: pointer;
+}
+
+.button-on-submit {
+
+  background-color:  $submit_button_color;
+
 }
