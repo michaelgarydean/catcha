@@ -1,10 +1,21 @@
 import React, { Component } from 'react'
+import { useState } from "react";
 import './app.scss'
+import Icons from "./Icons";
+import CatchaRandomImageGrid from "./CatchaRandomImageGrid";
+
+//total number of images that make up a grid (ex 16 = 4x4 grid)
+const gridSize = 9;
 
 /*
  * Render the webpage with the app
  */
  function App() {
+  
+  /*
+   * SET IMAGE TYPE: 0 for Cats, 1 for Cars
+   */
+   const [imageType, setImageType] = useState(0);
 
   return (
 
@@ -23,7 +34,7 @@ import './app.scss'
             <p>Click verify once there are none left.</p>
           </div>
 
-          {/*<CatchaImageGrid gridSize={gridSize} whichImage={currentImageIndex+1} />*/}
+          <CatchaRandomImageGrid gridSize={gridSize} imageType={imageType}/>
 
           </div> {/* end catcha-top-elements-container */}
 
@@ -33,7 +44,7 @@ import './app.scss'
               <div className="button-container">
                {/* Before refreshing the page, change the image type for show the next type when the page refreshes  refreshPage() */}
                {/*<button className={isSubmitting ? "verify-button button-on-submit" : "verify-button" } onClick={() => {setSubmitting(true); setImageType(!imageType); setCurrentImage(13);}}>VERIFY</button>*/}
-               <button className={"verify-button" } >VERIFY</button>
+               <button className={"verify-button" } onClick={() => {setImageType(!imageType); }}>VERIFY</button>
              </div>
           </div>
         </div> {/* end catcha-interior-elements-container */}
@@ -42,3 +53,7 @@ import './app.scss'
     </div>
     );
 }
+
+export default App;
+
+/* End App Component */

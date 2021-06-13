@@ -1,6 +1,6 @@
 {
-  "name": "image-scale",
-  "author": "andrevenancio",
+  "name": "catcha",
+  "author": "cadiedesbiensdesmeules",
   "version": "1.0.1",
   "private": true,
   "dependencies": {
@@ -26,6 +26,7 @@
   },
   "scripts": {
     "start": "webpack serve --mode development --hot --inline --open",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "postbuild": "cp CNAME build/ && cd build/ && surge"
   }
 }
