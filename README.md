@@ -1,70 +1,43 @@
-# Getting Started with Create React App
+# Image Scale Template
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This template requires react code to be transpiled to normal javascript, so it requires you to have [node.js](https://nodejs.org/en/) installed.
 
-## Available Scripts
+## Developing
 
-In the project directory, you can run:
+For the very first time running the project, you need to install the dependencies by running `npm install`.
 
-### `npm start`
+For subsequent runs, you simply need to run `npm start`.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Build
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Please remove all the content from folder `dist` and run `npm run build`. This will generate the HTML necessary for your HTML NFT on folder `dist`.
 
-### `npm test`
+## Gotchas
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- The reason you should remove the contents of the folder before you run `npm run build` is so you only end up with the necessary files for your NFT since the assets are hashed on every run.
+- Please make sure the exported HTML also doesn't have references to the files with `./filename.jpg` or `/filename.jpg` but `filename.jpg`.
 
-### `npm run build`
+## Publishing
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+All HTML content needs to be minted in a zip file. You can have multiple files inside your zip, however there are a few requirements you can't miss.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. The HTML file can only be called index.html
+2. The file should have a thumbnail image to be displayed until the user clicks to interact on your OBJKT. The image can be png, jpg or a gif. you just need to update the <metadata> reference inside the HTML file.
+3. At the moment calls to external sites are being blocked, even if they seem to work locally when you are testing. So any dependency needs to be included locally in the zip.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Regardless of what content you want to display (three.js, pixi.js, canvas, p5.js, shaders etc), it should always be full width and full height (window.innerWidth and window.innerHeight) so please dont forget to include your own resize function.
 
-### `npm run eject`
+## Customisation
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+If you want to create OBJKT's with different seeds, you can access the creator and viewer wallet ids. This values will only be injected once the piece has been minted
+they will not work locally.
+if the user is not sync, the viewer comes in as false
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```javascript
+const creator = new URLSearchParams(window.location.search).get('creator')
+// if the viewer is not authenticated to a wallet, this value will be false
+const viewer = new URLSearchParams(window.location.search).get('viewer')
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Hope you guys enjoy!
+Hicetnunc team
