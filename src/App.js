@@ -34,7 +34,7 @@ const gridSize = 9;
             <p>Click verify once there are none left.</p>
           </div>
 
-          <CatchaRandomImageGrid gridSize={gridSize} imageType={imageType}/>
+          <CatchaRandomImageGrid gridSize={gridSize} imageType={imageType} />
 
           </div> {/* end catcha-top-elements-container */}
 

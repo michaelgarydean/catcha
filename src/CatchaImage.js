@@ -9,11 +9,6 @@ import { useState, useEffect } from "react";
  */
  function CatchaImage(props) {
 
-  useEffect( () => {
-     setSelected(false);
-
-  }, [props.src]);
-
   const checkmarkurl = "url(" + 'checkmark.png' + ")";
 
   /*
@@ -21,6 +16,11 @@ import { useState, useEffect } from "react";
    * isSelected: so we know if the image has been clicked or not. Not clicked by default.
    */
     const [isSelected, setSelected] = useState(false);
+
+  useEffect( () => {
+     setSelected(false);
+
+  }, [props.src]);
 
     return(
 
