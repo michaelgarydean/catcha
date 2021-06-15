@@ -1,7 +1,6 @@
 import React from 'react';
-import { useState, useEffect,Suspense } from "react";
+import { useState, useEffect, useCallback } from "react";
 import CatchaImage from "./CatchaImage";
-import 'regenerator-runtime/runtime';
 
 //Storage to show the images on the grid
 var gridImages = [];
@@ -19,67 +18,63 @@ var carsImageOrder = fillWithRandomNumbers(totalCatImages);
  */
  function CatchaRandomImageGrid(props) {
 
-  const [isLoading, setIsLoading] = useState(true);
-
   var imageOrder;
+  //const [childrenLoaded, setChildrenLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  var childrenLoaded = 0;
+  var childRenderingFinished = false;
 
-
-  //If whichImage gets updated in the parent, re-render the component with a new image grid.
-  useEffect( () => {
-
-     gridImages = createGrid(props.gridSize, props.whichImage);
-
-    gridImages.forEach((src) => {
-      preloadImage(src)
-    });
-
-  }, [props.imageType]);
-     
-    
-
-     gridImages = createGrid(props.gridSize, props.whichImage);
-
-
+  //After parent has been loaded, update
+  // useEffect( () => {
+  //   setIsLoading(false);
   // }, []);
 
-  // const cacheImages = async (gridImages) => {
+  //callback
+  const handleChildLoad = useCallback(() =>  {
 
-  //   const promises = await gridImages.map((src) => {
+    childrenLoaded++;
+    //console.log(childrenLoaded);
 
-  //     return new Promise(function (resolve, reject) {
+    if(childrenLoaded === props.gridSize){
+      console.log("All children loaded");
+      childRenderingFinished = true;
+      setIsLoading(false);
+   }
+ }, []);
 
-  //       const img = new Image();
+  gridImages = createGrid(props.gridSize, props.whichImage);
+  var children = gridImages.map((source, gridPosition) => {
+    return(
+      <CatchaImage src={source} imageIndex={gridPosition} onImgLoad={handleChildLoad} key={"child-image-" + source} />
+    )
+  });
+  //after every render
+  // useEffect(() => {
+  //   setIsLoading(false);
+  // }, []);
 
-  //       img.src = src;
-  //       img.onload = resolve();
-  //       img.onerror = reject();
-        
-  //     });
+    // gridImages.forEach((src) => {
+    //   preloadImage(src)
+    // });
 
+  //After render
+  //If whichImage gets updated in the parent, re-render the component with a new image grid.
+
+  // useEffect( () => {
+
+  //   gridImages = createGrid(props.gridSize, props.whichImage);
+
+  //   gridImages.forEach((src) => {
+  //     preloadImage(src)
   //   });
 
-  //   await Promise.all(promises);
-  //   setIsLoading(false)
-  // };
+  // }, [props.imageType]);
 
    return (
-
-    <div key={props.whichImage} className="catcha-images">
-    {console.log(gridImages)}
-    
+    <div key={props.whichImage} className="catcha-images" style={{visibility: !isLoading ? 'visible' : 'hidden' }} >
     {/* CatchaImage */}
-      { 
-
-        gridImages.map((source, gridPosition) => {
-
-        
-          return(
-            <CatchaImage src={source} imageIndex={gridPosition} />
-          )
-        })
-      }
+      { children }
     {/* end CatchaImage */}
-
     </div>
     )
   }
@@ -178,4 +173,4 @@ function fillWithRandomNumbers(numElements) {
   return randomNumber;
 }
 
-  export default CatchaRandomImageGrid;
+export default CatchaRandomImageGrid;
