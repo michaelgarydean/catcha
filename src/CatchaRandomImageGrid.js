@@ -1,9 +1,10 @@
 import React from 'react';
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useContext } from "react";
 import CatchaImage from "./CatchaImage";
+import {LoadingContext} from "./LoadingContext";
 
 //Storage to show the images on the grid
-var gridImages = [];
+var imagesSources = [];
 
 const totalCatImages = 90;
 const totalCarImages = 90;
@@ -20,32 +21,39 @@ var carsImageOrder = fillWithRandomNumbers(totalCatImages);
 
   var imageOrder;
   //const [childrenLoaded, setChildrenLoaded] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   var childrenLoaded = 0;
-  var childRenderingFinished = false;
+
+  //const [loading, isLoading] = useContext(LoadingContext);
+  const [loading, isLoading] = useContext(LoadingContext);
+
+
 
   //After parent has been loaded, update
   // useEffect( () => {
   //   setIsLoading(false);
   // }, []);
 
-  //callback
+  //When all the <img> have loaded in the <GridImage> component, then update the state so we know loading is done
   const handleChildLoad = useCallback(() =>  {
 
     childrenLoaded++;
-    //console.log(childrenLoaded);
 
-    if(childrenLoaded === props.gridSize){
-      console.log("All children loaded");
-      childRenderingFinished = true;
-      setIsLoading(false);
-   }
- }, []);
+      if(childrenLoaded === props.gridSize){
+        console.log("All images have loaded");
+        isLoading(false);
+        console.log(loading);
+    }
+  }, []);
 
-  gridImages = createGrid(props.gridSize, props.whichImage);
-  var children = gridImages.map((source, gridPosition) => {
+  //an array of image paths for the src attribute in the <img> tags  
+  imagesSources = getImageSources(props.gridSize, props.imageType);
+
+  //all the image components to render (after all <img> have been loaded)
+  var children = imagesSources.map((source, gridPosition) => {
     return(
-      <CatchaImage src={source} imageIndex={gridPosition} onImgLoad={handleChildLoad} key={"child-image-" + source} />
+      <div>
+        <CatchaImage src={source} imageIndex={gridPosition} onImgLoad={handleChildLoad} key={"child-image-" + source} />
+      </div>
     )
   });
   //after every render
@@ -70,8 +78,12 @@ var carsImageOrder = fillWithRandomNumbers(totalCatImages);
 
   // }, [props.imageType]);
 
+  {/*<div key={props.whichImage} className="catcha-images" style={{visibility: childRenderingFinished ? 'visible' : 'hidden' }} >*/}
+
    return (
-    <div key={props.whichImage} className="catcha-images" style={{visibility: !isLoading ? 'visible' : 'hidden' }} >
+
+    
+    <div key={props.imageType} className="catcha-images">
     {/* CatchaImage */}
       { children }
     {/* end CatchaImage */}
@@ -85,7 +97,7 @@ var carsImageOrder = fillWithRandomNumbers(totalCatImages);
     return img;
   }
 
-  function createGrid(gridSize, imageType) {
+  function getImageSources(gridSize, imageType) {
 
     /*
      * If there are not enough random numbers to show the sequence, generate more and add them to the arrays

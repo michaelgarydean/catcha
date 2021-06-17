@@ -1,8 +1,9 @@
-import React, { Component } from 'react'
+import React, { Component, useContext } from 'react'
 import { useState } from "react";
 import './app.scss'
 import Icons from "./Icons";
 import CatchaRandomImageGrid from "./CatchaRandomImageGrid";
+import {LoadingContext} from "./LoadingContext";
 
 //total number of images that make up a grid (ex 16 = 4x4 grid)
 const gridSize = 9;
@@ -16,6 +17,7 @@ const gridSize = 9;
    * SET IMAGE TYPE: 0 for Cats, 1 for Cars
    */
    const [imageType, setImageType] = useState(0);
+   const [loading, isLoading] = useContext(LoadingContext);
 
   return (
 
@@ -33,9 +35,7 @@ const gridSize = 9;
             <h2>{imageType ? "cars" : "cats"}</h2>
             <p>Click verify once there are none left.</p>
           </div>
-
-          <CatchaRandomImageGrid gridSize={gridSize} imageType={imageType} />
-
+            <CatchaRandomImageGrid gridSize={gridSize} imageType={imageType} />
           </div> {/* end catcha-top-elements-container */}
 
           <div className="catcha-footer">
@@ -44,7 +44,11 @@ const gridSize = 9;
               <div className="button-container">
                {/* Before refreshing the page, change the image type for show the next type when the page refreshes  refreshPage() */}
                {/*<button className={isSubmitting ? "verify-button button-on-submit" : "verify-button" } onClick={() => {setSubmitting(true); setImageType(!imageType); setCurrentImage(13);}}>VERIFY</button>*/}
-               <button className={"verify-button" } onClick={() => {setImageType(!imageType); }}>VERIFY</button>
+                <button 
+                  className={loading ? "verify-button" : "verify-button button-on-submit"}
+                  onClick={() => {isLoading(true); console.log(loading); setImageType(!imageType); }}>
+                  VERIFY
+                </button>
              </div>
           </div>
         </div> {/* end catcha-interior-elements-container */}

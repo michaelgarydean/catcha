@@ -1,7 +1,6 @@
 import React from 'react';
 import { useState, useEffect, useRef, useCallback } from "react";
 
-
 /*
  * =================================== 
  * Component for a single CATCHA image.
@@ -38,11 +37,10 @@ import { useState, useEffect, useRef, useCallback } from "react";
 
   //   }, [props.src]);
 
-    //image will load only after component has been rendered...
+    //make sure default state after rendering loading is not-checked
     useEffect( () => {
        setSelected(false);
     }, [props.src]);
-
 
     return(
       <div id={"image" + props.imageIndex} className="catcha-single-image" key={"image-div" + props.imageIndex} 
@@ -59,6 +57,5 @@ import { useState, useEffect, useRef, useCallback } from "react";
       );
 
 }
-
 
 export default CatchaImage;
