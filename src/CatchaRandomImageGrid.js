@@ -20,63 +20,42 @@ var carsImageOrder = fillWithRandomNumbers(totalCatImages);
  function CatchaRandomImageGrid(props) {
 
   var imageOrder;
-  //const [childrenLoaded, setChildrenLoaded] = useState(false);
-  var childrenLoaded = 0;
 
   //const [loading, isLoading] = useContext(LoadingContext);
   const [loading, isLoading] = useContext(LoadingContext);
+  //const [childrenLoaded, setChildrenLoaded] = useState(0);
+  var childrenLoaded = 0;
 
+  // Similar to componentDidMount and componentDidUpdate:
+  useEffect(() => {
+    console.log("loading: " + loading);
+  }, [loading]);
 
-
-  //After parent has been loaded, update
-  // useEffect( () => {
-  //   setIsLoading(false);
-  // }, []);
+  useEffect(() => {
+    childrenLoaded = 0;
+  }, [props.imageType]);
 
   //When all the <img> have loaded in the <GridImage> component, then update the state so we know loading is done
-  const handleChildLoad = useCallback(() =>  {
+  const handleChildLoad = () =>  {
 
+    //setChildrenLoaded(childrenLoaded+1);
     childrenLoaded++;
 
-      if(childrenLoaded === props.gridSize){
-        console.log("All images have loaded");
-        isLoading(false);
-        console.log(loading);
+    if(childrenLoaded === props.gridSize){
+      isLoading(false);
     }
-  }, []);
+  }
 
   //an array of image paths for the src attribute in the <img> tags  
   imagesSources = getImageSources(props.gridSize, props.imageType);
+  //imagesSources = ['cats_01.jpg', 'cats_02.jpg', 'cats_03.jpg', 'cats_04.jpg', 'cats_05.jpg', 'cats_06.jpg', 'cats_07.jpg', 'cats_08.jpg', 'cats_09.jpg']
 
   //all the image components to render (after all <img> have been loaded)
   var children = imagesSources.map((source, gridPosition) => {
     return(
-      <div>
-        <CatchaImage src={source} imageIndex={gridPosition} onImgLoad={handleChildLoad} key={"child-image-" + source} />
-      </div>
+      <CatchaImage src={source} imageIndex={gridPosition} onImgLoad={handleChildLoad} key={"child-image-" + source} />
     )
   });
-  //after every render
-  // useEffect(() => {
-  //   setIsLoading(false);
-  // }, []);
-
-    // gridImages.forEach((src) => {
-    //   preloadImage(src)
-    // });
-
-  //After render
-  //If whichImage gets updated in the parent, re-render the component with a new image grid.
-
-  // useEffect( () => {
-
-  //   gridImages = createGrid(props.gridSize, props.whichImage);
-
-  //   gridImages.forEach((src) => {
-  //     preloadImage(src)
-  //   });
-
-  // }, [props.imageType]);
 
   {/*<div key={props.whichImage} className="catcha-images" style={{visibility: childRenderingFinished ? 'visible' : 'hidden' }} >*/}
 

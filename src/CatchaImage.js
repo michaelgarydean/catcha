@@ -1,5 +1,6 @@
 import React from 'react';
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useContext } from "react";
+import {LoadingContext} from "./LoadingContext";
 
 /*
  * =================================== 
@@ -8,6 +9,11 @@ import { useState, useEffect, useRef, useCallback } from "react";
  */
  function CatchaImage(props) {
 
+   // Similar to componentDidMount and componentDidUpdate:
+  useEffect(() => {
+    console.log("image component loaded");
+  }, []);
+
   const checkmarkurl = "url(" + 'checkmark.png' + ")";
 
   /*
@@ -15,27 +21,8 @@ import { useState, useEffect, useRef, useCallback } from "react";
    * isSelected: so we know if the image has been clicked or not. Not clicked by default.
    */
     const [isSelected, setSelected] = useState(false);
-    const [isLoaded, setIsLoaded] = useState(false);
-    // const prevSrc = usePrevious(props.src);
-
-    //make sure default state after rendering loading is not-checked
-    // useEffect( () => {
-    //   setIsLoaded(true);
-    // }, []);
-
-  //uncheck the image if the source has changed during the last render
-  /* After setting state, React will call your components componentDidUpdate function. 
-  By comparing the current and previous state objects within this function you can signal 
-  to the parent component that your async operation has completed and your new component's 
-  // state has rendered: */
-  //   useEffect( () => {
-  //      setSelected(false);
-
-  //      if(prevSrc !== props.src && isLoaded) {
-  //         props.onSrcChange
-  //      }
-
-  //   }, [props.src]);
+    //const [isLoaded, setIsLoaded] = useState(false);
+    const [loading, isLoading] = useContext(LoadingContext);
 
     //make sure default state after rendering loading is not-checked
     useEffect( () => {
@@ -49,7 +36,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
         <span className="catcha-image-size-aligner" key={"aligner" + props.imageIndex}></span>
         <img
           src={props.src} 
-          className={isSelected ? "catcha-image image-is-clicked" : "catcha-image" } 
+          className={`${isSelected ? "catcha-image image-is-clicked" : "catcha-image"} ${!loading ? "catcha-image-animation" : ""}` } 
           key={"source-image" + props.imageIndex}
           onLoad={ () => {props.onImgLoad()}}
         />
