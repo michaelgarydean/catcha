@@ -18,7 +18,24 @@ import {LoadingContext} from "./LoadingContext";
    */
   const [isSelected, setSelected] = useState(false);
   const [loadedSrc, setLoadedSrc] = useState(null);
+
   const [loading, setLoading] = useContext(LoadingContext);
+  const [animation, setAnimation] = useState("");
+
+  /*
+   * Make sure default state after rendering loading is not-checked
+   */
+  useEffect( () => {
+     setSelected(false);
+  }, [props.src]);
+
+  useEffect( () => {
+    if(isSelected) {
+     setAnimation(" catcha-image-animation");
+   }
+  }, [isSelected]);  
+
+  var imageClasses = (isSelected ? "catcha-image image-is-clicked" : "catcha-image") + animation;
 
   /* 
    * Load the images asynchronously, after everything else has already loaded 
@@ -32,14 +49,14 @@ import {LoadingContext} from "./LoadingContext";
 
           const handleLoad = () => {
             setLoadedSrc(props.src);
-
-            //callback funtion to CatchaRandomImageGrid to count the number of images loaded
-            props.onImgLoad();
           };
 
           const image = new Image();
           image.addEventListener('load', handleLoad);
           image.src = props.src;
+
+          //callback funtion to CatchaRandomImageGrid to count the number of images loaded
+          props.onImgLoad();
 
           return () => {
               image.removeEventListener('load', handleLoad);
@@ -47,25 +64,20 @@ import {LoadingContext} from "./LoadingContext";
       }
   }, [props.src]);
 
-  //make sure default state after rendering loading is not-checked
-  useEffect( () => {
-     setSelected(false);
-  }, [props.src]);
+  if (loadedSrc === props.src) {
 
-    if (loadedSrc === props.src) {
-
-      return(
-        <div id={"image" + props.imageIndex} className="catcha-single-image" key={"image-div" + props.imageIndex} 
-            onClick={() => setSelected(!isSelected )}>
-          <div className={isSelected ? "checkmark image-is-clicked" : "checkmark" } style={isSelected ? {backgroundImage: checkmarkurl} : {backgroundImage: "none"} } key={"checkmark" + props.imageIndex}></div>
-          <span className="catcha-image-size-aligner" key={"aligner" + props.imageIndex}></span>
-          <img
-            src={props.src} 
-            className={`${isSelected ? "catcha-image image-is-clicked" : "catcha-image"} ${loading ? "" : "catcha-image-animation" }`}
-            key={"source-image" + props.imageIndex}
-          />
-        </div>
-      );
+    return(
+      <div id={"image" + props.imageIndex} className="catcha-single-image" key={"image-div" + props.imageIndex} 
+          onClick={() => setSelected(!isSelected )}>
+        <div className={isSelected ? "checkmark image-is-clicked" : "checkmark" } style={isSelected ? {backgroundImage: checkmarkurl} : {backgroundImage: "none"} } key={"checkmark" + props.imageIndex}></div>
+        <span className="catcha-image-size-aligner" key={"aligner" + props.imageIndex}></span>
+        <img
+          src={props.src} 
+          className={imageClasses}
+          key={"source-image" + props.imageIndex}
+        />
+      </div>
+    );
 
   }
 

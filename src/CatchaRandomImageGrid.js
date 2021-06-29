@@ -32,7 +32,6 @@ var carsImageOrder = fillWithRandomNumbers(totalCatImages);
     console.log("image: " + imagesLoaded);
 
     if(imagesLoaded >= 9) {
-      
       //update state
       setLoading(false);
     }
