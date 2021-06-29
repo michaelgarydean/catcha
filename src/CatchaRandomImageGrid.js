@@ -20,97 +20,91 @@ var carsImageOrder = fillWithRandomNumbers(totalCatImages);
  function CatchaRandomImageGrid(props) {
 
   var imageOrder;
+  var imagesLoaded = 0;
 
-  //const [loading, isLoading] = useContext(LoadingContext);
-  const [loading, isLoading] = useContext(LoadingContext);
-  //const [childrenLoaded, setChildrenLoaded] = useState(0);
-  var childrenLoaded = 0;
-
-  // Similar to componentDidMount and componentDidUpdate:
-  useEffect(() => {
-    console.log("loading: " + loading);
-  }, [loading]);
-
-  useEffect(() => {
-    childrenLoaded = 0;
-  }, [props.imageType]);
+  const [loading, setLoading] = useContext(LoadingContext);
 
   //When all the <img> have loaded in the <GridImage> component, then update the state so we know loading is done
-  const handleChildLoad = () =>  {
+  const handleChildLoad = () => {
 
-    //setChildrenLoaded(childrenLoaded+1);
-    childrenLoaded++;
+    imagesLoaded++;
 
-    if(childrenLoaded === props.gridSize){
-      isLoading(false);
+    console.log("image: " + imagesLoaded);
+
+    if(imagesLoaded >= 9) {
+      
+      //update state
+      setLoading(false);
     }
+
+  };
+
+  //an array of image paths for the src attribute in the <img> tags 
+  if(loading) {
+    imagesSources = getImageSources(props.gridSize, props.imageType);
   }
 
-  //an array of image paths for the src attribute in the <img> tags  
-  imagesSources = getImageSources(props.gridSize, props.imageType);
-  //imagesSources = ['cats_01.jpg', 'cats_02.jpg', 'cats_03.jpg', 'cats_04.jpg', 'cats_05.jpg', 'cats_06.jpg', 'cats_07.jpg', 'cats_08.jpg', 'cats_09.jpg']
+  //create child elements on first render, then don't re-render unless imageSources is updated
+  const children = React.useMemo(() =>
+    imagesSources.map((source, gridPosition) => {
+      return(
+        //<CatchaImage src={source} imageIndex={gridPosition} onImgLoad={handleChildLoad} key={"child-image-" + source} />
+        <CatchaImage src={source} imageIndex={gridPosition} key={"child-image-" + source} onImgLoad={handleChildLoad} />
+      )
+    }), [imagesSources]
+  );
 
-  //all the image components to render (after all <img> have been loaded)
-  var children = imagesSources.map((source, gridPosition) => {
-    return(
-      <CatchaImage src={source} imageIndex={gridPosition} onImgLoad={handleChildLoad} key={"child-image-" + source} />
-    )
-  });
-
-  {/*<div key={props.whichImage} className="catcha-images" style={{visibility: childRenderingFinished ? 'visible' : 'hidden' }} >*/}
-
-   return (
-
-    
+  return (
     <div key={props.imageType} className="catcha-images">
     {/* CatchaImage */}
       { children }
     {/* end CatchaImage */}
     </div>
     )
-  }
+   
+}
 
-  function preloadImage(src) {
-    const img = document.createElement('img');
-    img.src = src; // Assigning the img src immediately requests the image
-    return img;
-  }
+function preloadImage(src) {
+  const img = document.createElement('img');
+  img.src = src; // Assigning the img src immediately requests the image
+  return img;
+}
 
-  function getImageSources(gridSize, imageType) {
+function getImageSources(gridSize, imageType) {
 
-    /*
-     * If there are not enough random numbers to show the sequence, generate more and add them to the arrays
-     */
-    if(imageType == 0 && catsImageOrder.length < gridSize) {
-      catsImageOrder = fillWithRandomNumbers(totalCatImages);
-    }
-
-    if(imageType == 1 && carsImageOrder.length < gridSize) {
-      carsImageOrder = fillWithRandomNumbers(totalCarImages);
-    }
-
-    var imageNumber;
-    var imagePrefix = imageType ? "cars" : "cats";
-    var imagesSources = [];
-
-    /* 
-   * Create an array that contains all the CatchaImage components
+  /*
+   * If there are not enough random numbers to show the sequence, generate more and add them to the arrays
    */
-   for(let squareIndex=1; squareIndex <= gridSize; squareIndex++){
-
-    //pick a number off the randomly ordered arrays
-    imageNumber = imageType ? carsImageOrder.shift() : catsImageOrder.shift();
-
-    //generate the filename based on the current image to render on the grid
-    var imageSrc = imagePrefix + "_" + String(imageNumber).padStart(2, '0') + ".jpg";
-
-    //add the path of the image to the imageSources array
-    imagesSources.push(imageSrc);
-   }
-
-   return imagesSources;
-
+  if(imageType == 0 && catsImageOrder.length < gridSize) {
+    catsImageOrder = fillWithRandomNumbers(totalCatImages);
   }
+
+  if(imageType == 1 && carsImageOrder.length < gridSize) {
+    carsImageOrder = fillWithRandomNumbers(totalCarImages);
+  }
+
+  var imageNumber;
+  var imagePrefix = imageType ? "cars" : "cats";
+  var imagesSources = [];
+
+  /* 
+ * Create an array that contains all the CatchaImage components
+ */
+ for(let squareIndex=1; squareIndex <= gridSize; squareIndex++){
+
+  //pick a number off the randomly ordered arrays
+  imageNumber = imageType ? carsImageOrder.shift() : catsImageOrder.shift();
+
+  //generate the filename based on the current image to render on the grid
+  var imageSrc = imagePrefix + "_" + String(imageNumber).padStart(2, '0') + ".jpg";
+
+  //add the path of the image to the imageSources array
+  imagesSources.push(imageSrc);
+ }
+
+ return imagesSources;
+
+}
 
 /*
  * Generate more random numbers if needed to keep showing the images in a random sequence

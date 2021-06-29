@@ -7,4 +7,4 @@ ReactDOM.render(
           <LoadingProvider>
           	<App />
           </LoadingProvider>, document.getElementById('app')
-          )
+    )
