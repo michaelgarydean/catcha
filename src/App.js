@@ -39,7 +39,7 @@ const gridSize = 9;
             <p>Click verify once there are none left.</p>
           </div>
             <div className="grid-loader" style={{visibility: loading ? 'hidden': 'visible' }}>
-              <CatchaRandomImageGrid gridSize={gridSize} imageType={imageType} />
+              <CatchaRandomImageGrid gridSize={gridSize} imageType={imageType.current} />
             </div>
           </div> {/* end catcha-top-elements-container */}
 
@@ -51,7 +51,7 @@ const gridSize = 9;
                {/*<button className={isSubmitting ? "verify-button button-on-submit" : "verify-button" } onClick={() => {setSubmitting(true); setImageType(!imageType); setCurrentImage(13);}}>VERIFY</button>*/}
                 <button 
                   className={loading ? "verify-button button-on-submit" : "verify-button" } 
-                  onClick={() => {setLoading(true); imageType.current = !imageType.current;}}
+                  onClick={() => {imageType.current = !imageType.current; setLoading(true);}}
                   >VERIFY</button>
              </div>
           </div>

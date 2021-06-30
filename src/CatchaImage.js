@@ -29,6 +29,9 @@ import {LoadingContext} from "./LoadingContext";
      setSelected(false);
   }, [props.src]);
 
+/*
+ * Add animation class when the image has been slected so it zooms out.
+ */
   useEffect( () => {
     if(isSelected) {
      setAnimation(" catcha-image-animation");

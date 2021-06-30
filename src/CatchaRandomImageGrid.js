@@ -82,6 +82,10 @@ function getImageSources(gridSize, imageType) {
     carsImageOrder = fillWithRandomNumbers(totalCarImages);
   }
 
+  console.log("imagetype: " + imageType);
+  console.log("cats: " + catsImageOrder.length);
+  console.log("cars: " + carsImageOrder.length);
+
   var imageNumber;
   var imagePrefix = imageType ? "cars" : "cats";
   var imagesSources = [];
