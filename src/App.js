@@ -1,4 +1,4 @@
-import React, { Component, useContext, useEffect, useMemo, useRef } from 'react'
+import React, { Component, useContext, useEffect, useRef } from 'react'
 import { useState } from "react";
 import './app.scss'
 import Icons from "./Icons";
@@ -16,9 +16,9 @@ const gridSize = 9;
   /*
    * SET IMAGE TYPE: 0 for Cats, 1 for Cars
    */
-  // const [imageType, setImageType] = useState(0);
   const imageType = useRef(0);
   const [loading, setLoading] = useContext(LoadingContext);
+  const [gridVisibility, setGridVisibility] = useState(false);
 
   //We only want to update the grid if imageType has changed
 
@@ -38,9 +38,8 @@ const gridSize = 9;
             <h2>{imageType.current ? "cars" : "cats"}</h2>
             <p>Click verify once there are none left.</p>
           </div>
-            <div className="grid-loader" style={{visibility: loading ? 'hidden': 'visible' }}>
-              <CatchaRandomImageGrid gridSize={gridSize} imageType={imageType.current} />
-            </div>
+
+          <CatchaRandomImageGrid gridSize={gridSize} imageType={imageType.current} />
           </div> {/* end catcha-top-elements-container */}
 
           <div className="catcha-footer">
@@ -48,11 +47,12 @@ const gridSize = 9;
             <Icons />
               <div className="button-container">
                {/* Before refreshing the page, change the image type for show the next type when the page refreshes  refreshPage() */}
-               {/*<button className={isSubmitting ? "verify-button button-on-submit" : "verify-button" } onClick={() => {setSubmitting(true); setImageType(!imageType); setCurrentImage(13);}}>VERIFY</button>*/}
                 <button 
                   className={loading ? "verify-button button-on-submit" : "verify-button" } 
                   onClick={() => {imageType.current = !imageType.current; setLoading(true);}}
-                  >VERIFY</button>
+                >
+                  VERIFY
+                </button>
              </div>
           </div>
         </div> {/* end catcha-interior-elements-container */}

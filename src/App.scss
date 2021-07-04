@@ -19,7 +19,7 @@
 
   /* GLOBAL VARIABLES */
   $catcha_width: 395px;
-  $catcha_height: 572px;
+  $catcha_height: 574px;
 
   $outer_border_grey: #CECECE;
   $inner_border_grey: #DFDFDF;
@@ -30,7 +30,7 @@
   $copy_color: #FFFFFF;
   $submit_button_color: rgb(165, 196, 235);
 
-  $image_size: 124px;
+  $image_size: 125px;
   $grid_gap: 2px;
   $icon_size: 27px;
 
@@ -216,11 +216,17 @@ body {
 
 /* Image grid */
 .grid-loader {
-  min-height: 379px;
+  // position: absolute; /* so grid-loader floats on top */
+    min-height: 376px;
+    margin-top: 4px;
+    width: 379px;
+    background-color: rgb(249, 249, 249);
 }
 
 .catcha-images {
+  // position: absolute; /* so grid-loader floats on top */
 
+    min-height: 376px;
   display: grid;
   grid-gap: $grid_gap;
   grid-template-columns: repeat($grid_row_columns, 1fr);
@@ -308,6 +314,7 @@ body {
  * CATCHA footer
  */
 .catcha-footer {
+  // margin-top: 380px; /* beacuse of absolute position of catcha-images and grid-loader + margin */
   padding: $inner_elements_padding;
   padding-top: 0px;
 }

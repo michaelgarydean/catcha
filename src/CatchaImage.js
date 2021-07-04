@@ -40,35 +40,6 @@ import {LoadingContext} from "./LoadingContext";
 
   var imageClasses = (isSelected ? "catcha-image image-is-clicked" : "catcha-image") + animation;
 
-  /* 
-   * Load the images asynchronously, after everything else has already loaded 
-   * @see https://dirask.com/posts/Improve-your-React-application-loading-speed-with-async-images-jMmYaj
-   */
-  useEffect(() => {
-
-      setLoadedSrc(null);
-
-      if (props.src) {
-
-          const handleLoad = () => {
-            setLoadedSrc(props.src);
-          };
-
-          const image = new Image();
-          image.addEventListener('load', handleLoad);
-          image.src = props.src;
-
-          //callback funtion to CatchaRandomImageGrid to count the number of images loaded
-          props.onImgLoad();
-
-          return () => {
-              image.removeEventListener('load', handleLoad);
-          };
-      }
-  }, [props.src]);
-
-  if (loadedSrc === props.src) {
-
     return(
       <div id={"image" + props.imageIndex} className="catcha-single-image" key={"image-div" + props.imageIndex} 
           onClick={() => setSelected(!isSelected )}>
@@ -78,11 +49,12 @@ import {LoadingContext} from "./LoadingContext";
           src={props.src} 
           className={imageClasses}
           key={"source-image" + props.imageIndex}
+          onLoad={() => props.onImgLoad()}
         />
       </div>
     );
 
-  }
+  // }
 
     return null;
 

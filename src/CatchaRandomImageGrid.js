@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect, useCallback, useContext } from "react";
+import { useState, useEffect, useRef, useCallback, useContext } from "react";
 import CatchaImage from "./CatchaImage";
 import {LoadingContext} from "./LoadingContext";
 
@@ -19,19 +19,28 @@ var carsImageOrder = fillWithRandomNumbers(totalCatImages);
  */
  function CatchaRandomImageGrid(props) {
 
-  var imageOrder;
-  var imagesLoaded = 0;
+  //count how many images have been fully loaded and are in the DOM
+  const imagesLoaded = useRef(0);
 
+  //are images still loading?
   const [loading, setLoading] = useContext(LoadingContext);
+
+  //Reset the image count to 0 if loading has been set to true after a render
+  useEffect( () => {
+    if(loading) {
+      imagesLoaded.current = 0;
+    }
+    
+  }, [loading]);  
 
   //When all the <img> have loaded in the <GridImage> component, then update the state so we know loading is done
   const handleChildLoad = () => {
 
-    imagesLoaded++;
+    //imagesLoaded++;
+    imagesLoaded.current += 1;
+    console.log("image: " + imagesLoaded.current);
 
-    console.log("image: " + imagesLoaded);
-
-    if(imagesLoaded >= 9) {
+    if(imagesLoaded.current >= props.gridSize) {
       //update state
       setLoading(false);
     }
@@ -53,13 +62,21 @@ var carsImageOrder = fillWithRandomNumbers(totalCatImages);
     }), [imagesSources]
   );
 
-  return (
-    <div key={props.imageType} className="catcha-images">
-    {/* CatchaImage */}
-      { children }
-    {/* end CatchaImage */}
-    </div>
-    )
+  // const children = imagesSources.map((source, gridPosition) => {
+  //     return(
+  //       //<CatchaImage src={source} imageIndex={gridPosition} onImgLoad={handleChildLoad} key={"child-image-" + source} />
+  //       <CatchaImage src={source} imageIndex={gridPosition} key={"child-image-" + source} onImgLoad={handleChildLoad} />
+  //     )
+  //   })
+
+  return <React.Fragment>
+      <div className="loading" style={{display: loading ? "block" : "none"}}></div>
+      <div key={props.imageType} className="catcha-images" style={{visibility: loading ? "hidden" : "visible"}}>
+        {/* CatchaImage */}
+        { children }
+        {/* end CatchaImage */}
+      </div>
+    </React.Fragment>;
    
 }
 
@@ -125,8 +142,12 @@ function verifyEnoughRandomNumbers(imageSequenceArray, totalAvailableImages, gri
   return imageSequenceArray;
 }
 
-  /*
+/*
  * Fill an array with random numbers that don't repeat.
+ * 
+ * @params  numElements - How many random numbers should be generated? 
+ * 
+ * @returns [1,numElements] in random order 
  */
 function fillWithRandomNumbers(numElements) {
 
@@ -154,7 +175,7 @@ function fillWithRandomNumbers(numElements) {
 }
 
 /* 
- * Generate a random number
+ * Generate a random number between [1,maxNumber]
  */
  function randomNumber(maxNumber) {
   var randomNumber = Math.floor((Math.random() * maxNumber) + 1);
