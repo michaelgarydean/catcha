@@ -5,11 +5,31 @@ import Icons from "./Icons";
 import CatchaRandomImageGrid from "./CatchaRandomImageGrid";
 import {LoadingContext} from "./LoadingContext";
 
+/*
+ * = = = =
+ * HEN BOILERPLATE
+ * = = = =
+ */
+const creator = new URLSearchParams(window.location.search).get('creator')
+const viewer = new URLSearchParams(window.location.search).get('viewer')
+
+console.log('OBJKT created by', creator)
+console.log('OBJKT viewed by', viewer)
+
+/*
+ * = = = =
+ * GLOBALS
+ * = = = =
+ */
+
+
 //total number of images that make up a grid (ex 16 = 4x4 grid)
 const gridSize = 9;
 
 /*
- * Render the webpage with the app
+ * = = = =
+ * APP
+ * = = = =
  */
  function App() {
   
