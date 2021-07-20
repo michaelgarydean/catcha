@@ -6,8 +6,9 @@ import {LoadingContext} from "./LoadingContext";
 //Storage to show the images on the grid
 var imagesSources = [];
 
-const totalCatImages = 90;
-const totalCarImages = 90;
+//Only chose 89 (there's really 90) to try to create more randomness without a perfectly divisible number
+const totalCatImages = 89;
+const totalCarImages = 89;
 
 var catsImageOrder = fillWithRandomNumbers(totalCarImages);
 var carsImageOrder = fillWithRandomNumbers(totalCatImages);
@@ -30,6 +31,8 @@ var carsImageOrder = fillWithRandomNumbers(totalCatImages);
     if(loading) {
       imagesLoaded.current = 0;
     }
+
+    //console.log(imagesSources);
     
   }, [loading]);  
 
@@ -38,7 +41,7 @@ var carsImageOrder = fillWithRandomNumbers(totalCatImages);
 
     //imagesLoaded++;
     imagesLoaded.current += 1;
-    console.log("image: " + imagesLoaded.current);
+    //console.log("image: " + imagesLoaded.current);
 
     if(imagesLoaded.current >= props.gridSize) {
       //update state
@@ -50,6 +53,7 @@ var carsImageOrder = fillWithRandomNumbers(totalCatImages);
   //an array of image paths for the src attribute in the <img> tags 
   if(loading) {
     imagesSources = getImageSources(props.gridSize, props.imageType);
+    //imagesSources = getImageSources(props.gridSize, 0);
   }
 
   //create child elements on first render, then don't re-render unless imageSources is updated
@@ -61,13 +65,6 @@ var carsImageOrder = fillWithRandomNumbers(totalCatImages);
       )
     }), [imagesSources]
   );
-
-  // const children = imagesSources.map((source, gridPosition) => {
-  //     return(
-  //       //<CatchaImage src={source} imageIndex={gridPosition} onImgLoad={handleChildLoad} key={"child-image-" + source} />
-  //       <CatchaImage src={source} imageIndex={gridPosition} key={"child-image-" + source} onImgLoad={handleChildLoad} />
-  //     )
-  //   })
 
   return <React.Fragment>
       <div className="loading" style={{display: loading ? "block" : "none"}}></div>
@@ -99,9 +96,7 @@ function getImageSources(gridSize, imageType) {
     carsImageOrder = fillWithRandomNumbers(totalCarImages);
   }
 
-  console.log("imagetype: " + imageType);
-  console.log("cats: " + catsImageOrder.length);
-  console.log("cars: " + carsImageOrder.length);
+  //console.log(catsImageOrder);
 
   var imageNumber;
   var imagePrefix = imageType ? "cars" : "cats";

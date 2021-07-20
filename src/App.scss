@@ -225,8 +225,6 @@ body {
 
 .catcha-images {
   // position: absolute; /* so grid-loader floats on top */
-
-    min-height: 376px;
   display: grid;
   grid-gap: $grid_gap;
   grid-template-columns: repeat($grid_row_columns, 1fr);
@@ -383,4 +381,168 @@ body {
 
   background-color:  $submit_button_color;
 
+}
+
+/* 
+    After minting on HEN, the iFrame isn't big enough to show the entire app.
+    
+    FIX: 20210717
+
+    After a 464px, app will be the original size.
+    Less than 464px, app will be zoomed to 81%.
+    Less then 382, app will be 62%;
+
+  */
+
+@media only screen and (max-height: 640px) {
+  $scale_size: 0.7;
+  $scaled_height: 401px;
+  $scaled_header_width: 268px;
+  $scaled_image_size: $image_size*0.72;
+
+  
+  .catcha-top-elements-container {
+    padding: 7px*$scale_size;
+  }
+
+  .catcha-outer-border {
+    box-shadow: 2px*$scale_size 2px*$scale_size 2px*$scale_size rgba(0, 0, 0, 0.16);
+  }
+
+  .catcha-header {
+    width: $scaled_header_width; 
+    padding: 24px*$scale_size 24px*$scale_size;
+    font-size: 14px*$scale_size;
+
+    h2 {
+      font-size: 28px*$scale_size;
+    }
+
+  }
+
+  .catcha-placement {
+    width: $catcha_width*$scale_size + 7px*$scale_size + 1px;
+    height: $scaled_height;
+
+  }  
+  .catcha-images {
+    margin-top: 2px;
+    grid-gap: 2px;
+
+    .catcha-single-image {
+
+      width: $scaled_image_size;
+      height: $scaled_image_size;
+
+      img {
+        height: $scaled_image_size;
+      } 
+    }
+
+  }
+
+  .verify-button {
+
+    padding: 13px*$scale_size 25px*$scale_size;
+    margin: 9px*$scale_size 1px*$scale_size;
+
+    font-size: 13px*$scale_size;
+  }
+
+  .catcha-footer {
+    padding: 7px*$scale_size;
+    padding-top: 0px;
+  }
+
+  .catcha-icons {
+
+    .icon {
+      margin: 14px*$scale_size 8px*$scale_size;
+      width: $icon_size*$scale_size;
+      height: $icon_size*$scale_size;
+    }
+  }
+
+  .checkmark {
+    width: 50px*$scale_size;
+    height: 50px*$scale_size;
+    background-size: 30px*$scale_size;
+
+  }
+}
+
+@media only screen and (max-height: 460px) {
+  $scale_size: 0.5;
+  $scaled_height: 288px;
+  $scaled_header_width: 190px;
+  $scaled_image_size: $image_size*0.51;
+  
+  .catcha-top-elements-container {
+    padding: 7px*$scale_size;
+  }
+
+  .catcha-outer-border {
+    box-shadow: 2px*$scale_size 2px*$scale_size 2px*$scale_size rgba(0, 0, 0, 0.16);
+  }
+
+  .catcha-header {
+    width: $scaled_header_width;
+    padding: 24px*$scale_size 24px*$scale_size;
+    font-size: 14px*$scale_size;
+
+    h2 {
+      font-size: 28px*$scale_size;
+    }
+
+  }
+
+  .catcha-placement {
+    width: $catcha_width*$scale_size + 7px*$scale_size + 1px;
+    height: $scaled_height;
+
+  }  
+  .catcha-images {
+    margin-top: 2px;
+    grid-gap: 2px;
+
+    .catcha-single-image {
+
+      width: $scaled_image_size;
+      height: $scaled_image_size;
+
+      img {
+        height: $scaled_image_size;
+      } 
+    }
+
+  }
+
+  .catcha-footer {
+    padding: 7px*$scale_size;
+    padding-top: 0px;
+  }
+
+  .verify-button {
+
+    padding: 13px*$scale_size 25px*$scale_size;
+    margin: 9px*$scale_size 1px*$scale_size;
+
+    font-size: 13px*$scale_size;
+  }
+
+  .catcha-icons {
+
+    .icon {
+      margin: 14px*$scale_size 8px*$scale_size;
+      width: $icon_size*$scale_size;
+      height: $icon_size*$scale_size;
+    }
+  }
+
+  .checkmark {
+    width: 50px*$scale_size;
+    height: 50px*$scale_size;
+    background-size: 30px*$scale_size;
+
+  }
 }
